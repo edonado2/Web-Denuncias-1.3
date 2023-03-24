@@ -34,6 +34,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $agresores = json_decode($_POST['agresores']);
 
+    if (empty($nombre_denunciante) || empty($apellido_denunciante) || empty($cedula_denunciante) || empty($telefono_denunciante)) {
+        echo "Error: Debe completar todos los campos del denunciante";
+        exit();
+    }
+
+    if (empty($denuncia) || empty($lugar) || empty($tipo_de_abuso) || empty($fecha_abuso) || empty($hora_abuso)) {
+        echo "Error: Debe completar todos los campos de la denuncia";
+        exit();
+    }
+
     // Crea la consulta SQL para insertar los datos de denunciantes en la base de datos
     $usuario_id = $_SESSION['id'];
     $sqlDenunciante = "INSERT INTO denunciantes(nombre, apellido, cedula, telefono, usuario_id) VALUES ('$nombre_denunciante', '$apellido_denunciante', '$cedula_denunciante', '$telefono_denunciante', $usuario_id)";
