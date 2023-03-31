@@ -131,18 +131,45 @@ if (!isset($_SESSION)) {
             puedes solicitar ayuda en Venezuela
           </h2>
         </div>
-      </div>
-      <div>
-
         <section class="client_section  mt-5">
-          <div class="container mx-auto mapa_container ">
-            <img src="images/mapa-web.jpg" class="w-100" alt="">
+          <div class="container mx-auto">
+            <h3 class="mb-4 text-center font-weight-bold text-purple" style="color: #66439A;">Ministerio Público</h3>
+            <div class="d-flex justify-content-center">
+              <iframe class="mb-5"  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15683.66069769599!2d-71.6154646!3d10.6636921!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e8998e3c210e137%3A0x826875471e54313f!2sMinisterio%20P%C3%BAblico!5e0!3m2!1ses-419!2sve!4v1679676516312!5m2!1ses-419!2sve" width="640" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
 
-          </div>
-        </section>
+            <h3 class="mb-4 text-center font-weight-bold text-purple mt-5" style="color: #66439A;">Defensoría Pública</h3>
+            <div class="d-flex justify-content-center">
+              <iframe class="mb-5"  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15682.917092707183!2d-71.6069867!3d10.6781095!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e8998c5245ae851%3A0x3153bbccb6292ff2!2sDefensoria%20Publica%20Maracaibo!5e0!3m2!1ses-419!2sve!4v1679676587315!5m2!1ses-419!2sve" width="640" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <h3 class="mb-4 text-center font-weight-bold text-purple mt-5" style="color: #66439A;">Instituto Nacional de la Mujer</h3>
+            <div class="d-flex justify-content-center">
+              <iframe class="mb-5" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15683.214692039062!2d-71.6035398!3d10.6723418!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e8998c3b60de2e7%3A0x68b991010241cb6e!2sEdificio%20INMUJER%20(Instituto%20Nacional%20de%20la%20Mujer)!5e0!3m2!1ses-419!2sve!4v1679676217888!5m2!1ses-419!2sve" width="640" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <h3 class="mb-4 text-center font-weight-bold text-purple mt-5" style="color: #66439A;">Gobernación del Estado Zulia</h3>
+            <div class="d-flex justify-content-center">
+              <iframe class="mb-5" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15684.01016948632!2d-71.606173!3d10.6569097!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e899948e262dd2b%3A0x18a0077de7325606!2sGOBERNACION%20DEL%20ESTADO%20ZULIA!5e0!3m2!1ses-419!2sve!4v1679676323768!5m2!1ses-419!2sve" width="640" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+              <h3 class="mb-4 text-center font-weight-bold text-purple mt-5" style="color: #66439A;">Jefatura de Policia</h3>
+              <div class="d-flex justify-content-center">
+                <iframe class="mb-5"  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15682.495619747282!2d-71.6241335!3d10.6862727!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e89992967bc3199%3A0xef2a5e083f392f37!2sComandancia%20Policia%20Bolivariana%20Estado%20Zulia%2C%20Av.%20Las%20Delicias%2C%20Calle%2059%2C%20Maracaibo%204002%2C%20Zulia!5e0!3m2!1ses-419!2sve!4v1679677140699!5m2!1ses-419!2sve" width="640" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+
+              
+            <h3 class="mb-4 text-center font-weight-bold text-purple mt-5" style="color: #66439A;">Sistema Municipal de Protección de<br>Niños, Niñas y Adolescentes</h3>
+            <div class="d-flex justify-content-center">
+              <iframe class="mb-5" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15697.835014435386!2d-71.4383315!3d10.3850911!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e89c7047a436f95%3A0x74863c9ae1f7a427!2sSistema%20Municipal%20de%20Protecci%C3%B3n%20de%20Ni%C3%B1os%2C%20Ni%C3%B1as%20y%20Adolescentes%20Cabimas%20SMPNNAC!5e0!3m2!1ses-419!2sve!4v1679677750017!5m2!1ses-419!2sve" width="640" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+            </div>
+          </section>
 
       </div>
     </section>
+
+    
 
     <!-- end feature section -->
 

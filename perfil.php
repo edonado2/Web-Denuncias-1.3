@@ -44,7 +44,7 @@ if (!isset($_SESSION)) {
   <!-- Custom styles for this template -->
   <link href="css/perfil.css" rel="stylesheet" />
   <!-- responsive style -->
-  <link href="css/responsive-home.css" rel="stylesheet" />
+  <link href="css/responsive-perfil.css" rel="stylesheet" />
 </head>
 
 <body id="body" class=" ">
@@ -96,7 +96,7 @@ if (!isset($_SESSION)) {
   <section class="hero_area slider_section position-relative pt-md-5">
     <div class="container pt-md-5">
       <div class="row pt-5">
-        <div class="detail-box px-lg-5">
+        <div class="detail-box px-5">
           <h2>
             Perfil
           </h2>
@@ -131,7 +131,7 @@ if (!isset($_SESSION)) {
   $email = $_SESSION['email'];
   ?>
   <!-- end download section -->
-  <div class="container-fluid bg-white px-xl-5 p-5">
+  <div class="container-fluid bg-white px-xl-5 py-5">
     <div class="container-fluid px-lg-5">
       <h3 class="section-2">Nombre</h3>
       <ol class="breadcrumb mb-4">
@@ -142,7 +142,7 @@ if (!isset($_SESSION)) {
         <li class="breadcrumb-item active"><?php echo $email; ?></li>
       </ol>
 
-      <h3 class="px-4 py-4">
+      <h3 class="px-4 py-4 ">
         Cambiar contraseña
       </h3>
       <div class="card-body bg-color mb-5">
@@ -163,7 +163,7 @@ if (!isset($_SESSION)) {
             <div class="alertChangePass" style="display:none;">
             </div>
             <div class="d-flex justify-content-center">
-              <button type="submit" name="cambiarpass" class="btn btn-contraseña btnChangePass">Cambiar Contraseña</button>
+              <button type="submit" name="cambiarpass" class="btn btn-contraseña btnChangePass  text-password">Cambiar Contraseña</button>
             </div>
             <?php
             function get_my_db()

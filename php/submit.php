@@ -66,7 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $id_denunciado = mysqli_insert_id($conexion);
 
-        $sqlDenuncia = "INSERT INTO denuncias(descripcion, lugar_del_acontecimiento, tipo_abuso, fecha_abuso, hora_acontecimiento) VALUES ('$denuncia', '$lugar', '$tipo_de_abuso', '$fecha_abuso', '$hora_abuso')";
+        $sqlDenuncia = "INSERT INTO denuncias(descripcion, lugar_del_acontecimiento, tipo_abuso, fecha_abuso, hora_acontecimiento, id_denunciado) VALUES ('$denuncia', '$lugar', '$tipo_de_abuso', '$fecha_abuso', '$hora_abuso', '$id_denunciado')";
+
 
         $result = mysqli_query($conexion, $sqlDenuncia);
 

@@ -386,10 +386,8 @@ a:focus {
 }
 
 .mapa_container {
-  border: 1px solid #383a9080;
   width: 100%;
   padding: 10px;
-  border-radius: 30px;
 }
 
 .client_container {
