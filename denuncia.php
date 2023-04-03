@@ -22,7 +22,7 @@ if (array_key_exists('id', $_SESSION)) {
   dc.hora_acontecimiento
 FROM 
   denunciados AS d
-  INNER JOIN denunciantes AS dn ON dn.id = d.id 
+  INNER JOIN denunciantes AS dn ON dn.id = d.id_denuncia 
   INNER JOIN denuncias AS dc ON dc.id= d.id
 WHERE 
   dn.usuario_id = $id
@@ -130,23 +130,22 @@ WHERE
         echo '<table id="denunciados" class="table table-striped table-hover" width="100%">';
         echo '<thead>';
         echo '<tr>';
-        echo '<th scope="col">Nombre</th>';
-        echo '<th scope="col">Apellido</th>';
-        echo '<th scope="col">Cedula</th>';
-        echo '<th scope="col">Tipo Abuso</th>';
         echo '<th scope="col">Fecha</th>';
         echo '<th scope="col">Hora</th>';
+        echo '<th scope="col">Tipo Abuso</th>';
+        echo '<th scope="col">Nombre</th>';
+        echo '<th scope="col">Descargar</th>';
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
         foreach ($registros as $registro) {
           echo '<tr>';
-          echo '<td>' . $registro['nombre'] . '</td>';
-          echo '<td>' . $registro['apellido'] . '</td>';
-          echo '<td>' . $registro['cedula'] . '</td>';
-          echo '<td>' . $registro['tipo_abuso'] . '</td>';
           echo '<td>' . $registro['fecha_abuso'] . '</td>';
           echo '<td>' . $registro['hora_acontecimiento'] . '</td>';
+          echo '<td>' . $registro['tipo_abuso'] . '</td>';
+          echo '<td>' . $registro['nombre'] . '</td>';
+          echo '<td><button class="btn btn-secondary pdf-button">Descargar</button></td>';
+
           echo '</tr>';
         }
         echo '</tbody>';
@@ -159,52 +158,49 @@ WHERE
       }
       ?>
 
-      <button class="btn btn-primary" id="pdf-button">Descargar PDF</button>
-      <br>
-      <br>
-
       <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js"></script>
 
       <script>
-        var pdfButton = document.getElementById("pdf-button");
-        pdfButton.addEventListener('click', function() {
-          // Get the HTML table element
-          var table = document.getElementById("denunciados");
+        var pdfButton = document.getElementsByClassName("pdf-button");
+        for (var i = 0; i < pdfButton.length; i++) {
+          pdfButton[i].addEventListener('click', function() {
+            // Get the HTML table element
+            var table = document.getElementById("denunciados");
 
-          // Define table column widths
-          var columnWidths = [100, 100, 100, 100, 100, 100];
+            // Define table column widths
+            var columnWidths = [100, 100, 100, 100, 100, 100];
 
-          // Define table headers
-          var headers = [{
-              text: 'Nombre',
-              style: 'tableHeader'
-            },
-            {
-              text: 'Apellido',
-              style: 'tableHeader'
-            },
-            {
-              text: 'Cédula',
-              style: 'tableHeader'
-            },
-            {
-              text: 'Tipo de Abuso',
-              style: 'tableHeader'
-            },
-            {
-              text: 'Fecha',
-              style: 'tableHeader'
-            },
-            {
-              text: 'Hora',
-              style: 'tableHeader'
-            }
-          ];
+            // Define table headers
+            var headers = [{
+                text: 'Nombre',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Apellido',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Cédula',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Tipo de Abuso',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Fecha',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Hora',
+                style: 'tableHeader'
+              }
+            ];
 
-          // Define table data
-          var data = [];
-          <?php foreach ($registros as $registro) { ?>
+            // Define table data
+            var data = [];
+
             data.push([{
                 text: '<?php echo $registro['nombre']; ?>',
                 style: 'tableCell'
@@ -230,44 +226,98 @@ WHERE
                 style: 'tableCell'
               }
             ]);
-          <?php } ?>
+            <?php ?>
 
-          // Define table styles
-          var styles = {
-            tableHeader: {
-              fillColor: '#337ab7',
-              color: '#fff',
-              bold: true
-            },
-            tableCell: {
-              fillColor: '#fff'
-            }
-          };
-
-          // Create the PDF document definition
-          var docDefinition = {
-            content: [{
-                text: 'Historial de Denuncias',
-                style: 'header'
+            // Define table styles
+            var styles = {
+              tableHeader: {
+                fillColor: '#337ab7',
+                color: '#fff',
+                bold: true
               },
-              {
-                table: {
-                  headerRows: 1,
-                  widths: columnWidths,
-                  body: [headers].concat(data)
-                },
-                layout: 'lightHorizontalLines'
+              tableCell: {
+                fillColor: '#fff'
               }
-            ],
-            styles: styles
-          };
+            };
 
-          // Create a new PDF document
-          var pdfDoc = pdfMake.createPdf(docDefinition);
+            // Create the PDF document definition
+            var docDefinition = {
+              content: [{
+                  text: 'Datos de la Denuncia',
+                  style: 'header'
+                },
+                {
+                  table: {
+                    headerRows: 1,
+                    widths: columnWidths,
+                    body: [headers].concat(data)
+                  },
+                  layout: 'lightHorizontalLines'
+                }
+              ],
+              styles: styles
+            };
 
-          // Save the PDF file
-          pdfDoc.download("denunciasUsuario.pdf");
-        });
+            // Create the PDF document definition
+            var docDefinition = {
+              info: {
+                title: 'Datos de la Denuncia',
+                subject: 'Descripción del documento',
+                author: 'Tu Nombre',
+                keywords: 'denuncia, abuso, PDF'
+              },
+              content: [{
+                  text: 'Datos de la Denuncia',
+                  style: 'header'
+                },
+                {
+                  text: 'Descripción del documento: Esta denuncia no es válida hasta que sea sellada por un organismo competente',
+                  style: 'description'
+                },
+                {
+                  table: {
+                    headerRows: 1,
+                    widths: columnWidths,
+                    body: [headers].concat(data)
+                  },
+                  layout: 'lightHorizontalLines'
+                }
+              ],
+              styles: {
+                header: {
+                  fontSize: 18,
+                  bold: true,
+                  margin: [0, 0, 0, 10]
+                },
+                description: {
+                  fontSize: 12,
+                  margin: [0, 0, 0, 10]
+                },
+                tableHeader: {
+                  fillColor: '#337ab7',
+                  color: '#fff',
+                  bold: true
+                },
+                tableCell: {
+                  fillColor: '#fff'
+                }
+              }
+            };
+
+            // Create a new PDF document
+            var pdfDoc = pdfMake.createPdf(docDefinition);
+
+            // Save the PDF file
+            pdfDoc
+
+
+            // Create a new PDF document
+            var pdfDoc = pdfMake.createPdf(docDefinition);
+
+            // Save the PDF file
+            pdfDoc.download("denunciasUsuario.pdf");
+          });
+        }
       </script>
 
 
