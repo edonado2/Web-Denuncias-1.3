@@ -110,7 +110,7 @@ function enviar() {
           if (xhr.status === 200) {
             // El servidor respondió correctamente
 
-            if (xhr.responseText == "1") {
+            if (xhr.responseText == "True") {
               // Todo bien
               Swal.fire({
                 position: 'center',
@@ -131,6 +131,7 @@ function enviar() {
                 showConfirmButton: false
               });
             }
+            console.log(xhr.responseText)
           } else {
             // Hubo un error al enviar la solicitud
             console.error(xhr.statusText);

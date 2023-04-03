@@ -10,12 +10,30 @@ include './php/conexion_be.php';
 // Add missing parentheses to include statement
 
 if (array_key_exists('id', $_SESSION)) {
-  $cantidad = 0;
   $id = $_SESSION['id'];
-  $query = "SELECT d.* FROM denunciados AS d WHERE d.id_denunciante IN (SELECT dd.id FROM denunciantes AS dd WHERE usuario_id = $id);";
+  $query = "SELECT 
+  d.*, 
+  dn.nombre AS denunciante_nombre,
+  dn.apellido AS denunciante_apellido,
+  dn.cedula AS denunciante_cedula,
+  dc.tipo_abuso,
+  dc.descripcion,
+  dc.fecha_abuso,
+  dc.hora_acontecimiento
+FROM 
+  denunciados AS d
+  INNER JOIN denunciantes AS dn ON dn.id = d.id 
+  INNER JOIN denuncias AS dc ON dc.id= d.id
+WHERE 
+  dn.usuario_id = $id
+
+";
+
   $resultado = mysqli_query($conexion, $query);
   $registros = array();
-  if (mysqli_num_rows($resultado) > 0) {
+  if (
+    $resultado && mysqli_num_rows($resultado) > 0
+  ) {
     while ($fila = mysqli_fetch_assoc($resultado)) {
       $registros[] = $fila;
     }
@@ -64,24 +82,24 @@ if (array_key_exists('id', $_SESSION)) {
             </button>
           </div>
           <div id="myNav" class="overlay">
-          <div class="overlay-content">
-                <a class="link-space" href="index.php">INICIO</a>
-                <a class="link-space" href="centros-de-ayuda.php">CENTROS DE AYUDA</a>
-                <a class="link-space" href="mapa.php">UBICACIÓN</a>
-                <a class="link-space" href="denuncia.php">DENUNCIAS</a>
-                <div class="btn-link-bg">
-                  <?php
-                  if ($_SESSION) { // if a session is started
-                    echo '<a class="link-space" href="perfil.php">PERFIL</a>';
-                  } else {
-                    echo '<div class="btn-link-bg">';
-                    echo '<a class="link-space btn-link-space" href="login.php">INICIAR SESIÒN</a>';
-                    echo '</div>';
-                  }
-                  ?>
+            <div class="overlay-content">
+              <a class="link-space" href="index.php">INICIO</a>
+              <a class="link-space" href="centros-de-ayuda.php">CENTROS DE AYUDA</a>
+              <a class="link-space" href="mapa.php">UBICACIÓN</a>
+              <a class="link-space" href="denuncia.php">DENUNCIAS</a>
+              <div class="btn-link-bg">
+                <?php
+                if ($_SESSION) { // if a session is started
+                  echo '<a class="link-space" href="perfil.php">PERFIL</a>';
+                } else {
+                  echo '<div class="btn-link-bg">';
+                  echo '<a class="link-space btn-link-space" href="login.php">INICIAR SESIÒN</a>';
+                  echo '</div>';
+                }
+                ?>
 
 
-                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -106,14 +124,18 @@ if (array_key_exists('id', $_SESSION)) {
 
       if ($_SESSION) { // if a session is started
 
-
         // Mostrar los registros en una tabla
+
+        echo '<div class= "table-responsive-sm" style="padding:20px">';
         echo '<table id="denunciados" class="table table-striped table-hover" width="100%">';
         echo '<thead>';
         echo '<tr>';
         echo '<th scope="col">Nombre</th>';
         echo '<th scope="col">Apellido</th>';
         echo '<th scope="col">Cedula</th>';
+        echo '<th scope="col">Tipo Abuso</th>';
+        echo '<th scope="col">Fecha</th>';
+        echo '<th scope="col">Hora</th>';
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
@@ -122,10 +144,14 @@ if (array_key_exists('id', $_SESSION)) {
           echo '<td>' . $registro['nombre'] . '</td>';
           echo '<td>' . $registro['apellido'] . '</td>';
           echo '<td>' . $registro['cedula'] . '</td>';
+          echo '<td>' . $registro['tipo_abuso'] . '</td>';
+          echo '<td>' . $registro['fecha_abuso'] . '</td>';
+          echo '<td>' . $registro['hora_acontecimiento'] . '</td>';
           echo '</tr>';
         }
         echo '</tbody>';
         echo '</table>';
+        echo '</div>';
 
         // Cerrar la conexión a la base de datos
       } else {
@@ -133,25 +159,119 @@ if (array_key_exists('id', $_SESSION)) {
       }
       ?>
 
-      <button class="btn btn primary" id="pdf-button">Descargar PDF</button>
-      <!-- Add a click event listener to the button -->
+      <button class="btn btn-primary" id="pdf-button">Descargar PDF</button>
+      <br>
+      <br>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js"></script>
+
       <script>
         var pdfButton = document.getElementById("pdf-button");
         pdfButton.addEventListener('click', function() {
           // Get the HTML table element
           var table = document.getElementById("denunciados");
 
-          // Create a new jsPDF instance
-          var doc = new jsPDF();
+          // Define table column widths
+          var columnWidths = [100, 100, 100, 100, 100, 100];
 
-          // Convert the HTML table to a string of HTML
-          var html = table.outerHTML;
+          // Define table headers
+          var headers = [{
+              text: 'Nombre',
+              style: 'tableHeader'
+            },
+            {
+              text: 'Apellido',
+              style: 'tableHeader'
+            },
+            {
+              text: 'Cédula',
+              style: 'tableHeader'
+            },
+            {
+              text: 'Tipo de Abuso',
+              style: 'tableHeader'
+            },
+            {
+              text: 'Fecha',
+              style: 'tableHeader'
+            },
+            {
+              text: 'Hora',
+              style: 'tableHeader'
+            }
+          ];
 
-          // Generate the PDF file
-          doc.fromHTML(html, 10, 10);
-          doc.save("denunciasUsuario.pdf");
+          // Define table data
+          var data = [];
+          <?php foreach ($registros as $registro) { ?>
+            data.push([{
+                text: '<?php echo $registro['nombre']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro['apellido']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro['cedula']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro['tipo_abuso']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro['fecha_abuso']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro['hora_acontecimiento']; ?>',
+                style: 'tableCell'
+              }
+            ]);
+          <?php } ?>
+
+          // Define table styles
+          var styles = {
+            tableHeader: {
+              fillColor: '#337ab7',
+              color: '#fff',
+              bold: true
+            },
+            tableCell: {
+              fillColor: '#fff'
+            }
+          };
+
+          // Create the PDF document definition
+          var docDefinition = {
+            content: [{
+                text: 'Historial de Denuncias',
+                style: 'header'
+              },
+              {
+                table: {
+                  headerRows: 1,
+                  widths: columnWidths,
+                  body: [headers].concat(data)
+                },
+                layout: 'lightHorizontalLines'
+              }
+            ],
+            styles: styles
+          };
+
+          // Create a new PDF document
+          var pdfDoc = pdfMake.createPdf(docDefinition);
+
+          // Save the PDF file
+          pdfDoc.download("denunciasUsuario.pdf");
         });
       </script>
+
+
+
     </div>
   </div>
 

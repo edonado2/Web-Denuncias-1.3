@@ -44,39 +44,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Crea la consulta SQL para insertar los datos de denunciantes en la base de datos
+    // Get user ID from session
     $usuario_id = $_SESSION['id'];
-    $sqlDenunciante = "INSERT INTO denunciantes(nombre, apellido, cedula, telefono, usuario_id) VALUES ('$nombre_denunciante', '$apellido_denunciante', '$cedula_denunciante', '$telefono_denunciante', $usuario_id)";
 
-    // // Ejecuta la consulta y verifica si fue exitosa
+    // Insert denunciante data into database
+    $sqlDenunciante = "INSERT INTO denunciantes(nombre, apellido, cedula, telefono, usuario_id) VALUES ('$nombre_denunciante', '$apellido_denunciante', '$cedula_denunciante', '$telefono_denunciante', $usuario_id)";
     $result = mysqli_query($conexion, $sqlDenunciante);
+
     if ($result) {
-        // Si la inserción de denunciantes fue exitosa, inserta los datos de denunciados
+        // Get ID of the inserted denunciante
         $id_denunciante = mysqli_insert_id($conexion);
 
-        foreach ($agresores as $value) {
-            $nombre = $value->name;
-            $apellido = $value->lastname;
-            $cedula = $value->code;
-
-            $sqlDenunciado = "INSERT INTO denunciados(nombre, apellido, cedula, id_denunciante) VALUES ('$nombre', '$apellido', '$cedula', '$id_denunciante')";
-
-            mysqli_query($conexion, $sqlDenunciado);
-        }
-
-        $id_denunciado = mysqli_insert_id($conexion);
-
-        $sqlDenuncia = "INSERT INTO denuncias(descripcion, lugar_del_acontecimiento, tipo_abuso, fecha_abuso, hora_acontecimiento, id_denunciado) VALUES ('$denuncia', '$lugar', '$tipo_de_abuso', '$fecha_abuso', '$hora_abuso', '$id_denunciado')";
-
-
+        // Insert denuncia data into database using the denunciante ID
+        $sqlDenuncia = "INSERT INTO denuncias(descripcion, lugar_del_acontecimiento, tipo_abuso, fecha_abuso, hora_acontecimiento, id_denunciante) VALUES ('$denuncia', '$lugar', '$tipo_de_abuso', '$fecha_abuso', '$hora_abuso', '$id_denunciante')";
         $result = mysqli_query($conexion, $sqlDenuncia);
 
         if ($result) {
-            print(True);
+            // Get ID of the inserted denuncia
+            $id_denuncia = mysqli_insert_id($conexion);
+
+            // Insert denunciado data into database using the denuncia ID
+            foreach ($agresores as $value) {
+                $nombre = $value->name;
+                $apellido = $value->lastname;
+                $cedula = $value->code;
+
+                $sqlDenunciado = "INSERT INTO denunciados(nombre, apellido, cedula, id_denuncia) VALUES ('$nombre', '$apellido', '$cedula', '$id_denuncia')";
+                mysqli_query($conexion, $sqlDenunciado);
+            }
+
+            // Print success message
+            echo "true";
         } else {
-            print(False);
+            // Print error message
+            print("False");
         }
     } else {
+        // Print error message
         echo "Error al insertar los datos de denunciante: " . mysqli_error($conexion);
     }
 }
