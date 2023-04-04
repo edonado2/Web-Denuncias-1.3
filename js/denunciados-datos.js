@@ -57,7 +57,7 @@ function enviar() {
         pdfData,
       };
 
-      xhr.open("POST", "http://localhost/Urbe-App-Web-main/php/send_email.php", true);
+      xhr.open("POST", "http://localhost/Web-Denuncias-1.3/php/send_email.php", true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.send(JSON.stringify(emailData));
 
@@ -78,7 +78,7 @@ function enviar() {
       // Configurar la solicitud POST
 
       // NOTA IMPORTANTE: Si la URL no funciona prueba: "../php/submit.php"
-      xhr.open("POST", "http://localhost/Urbe-App-Web-main/php/submit.php", true);
+      xhr.open("POST", "http://localhost/Web-Denuncias-1.3/php/submit.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
       xhr.send(
@@ -109,8 +109,9 @@ function enviar() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             // El servidor respondió correctamente
+            console.log(xhr);
 
-            if (xhr.responseText == "True") {
+            if (xhr.responseText == "true") {
               // Todo bien
               Swal.fire({
                 position: 'center',
@@ -144,43 +145,6 @@ function enviar() {
 }
 
 function agregar() {
-  // Obtener los valores de los campos de entrada
-  // var nombreDenunciado = document.getElementById("txtIdNombre").value;
-  // var apellidoDenunciado = document.getElementById("txtIdApellido").value;
-  // var cedulaDenunciado = document.getElementById("txtIdCedula").value;
-
-  // var aggressor = {
-  //   name: nombreDenunciado,
-  //   lastname: apellidoDenunciado,
-  //   code: cedulaDenunciado,
-  // };
-
-  // aggressorList.push(aggressor);
-
-  // renderList();
-
-  // // Crear un objeto de solicitud XMLHttpRequest
-  // var xhr = new XMLHttpRequest();
-
-  // // Configurar la solicitud POST
-  // xhr.open("POST", "../php/submit.php", true);
-  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-  // // Enviar la solicitud con los datos del denunciado
-  // xhr.send("nombre_denunciado=" + nombreDenunciado + "&apellido_denunciado=" + apellidoDenunciado + "&cedula_denunciado=" + cedulaDenunciado);
-
-  // // Manejar la respuesta de la solicitud
-  // xhr.onreadystatechange = function () {
-  //   if (xhr.readyState === XMLHttpRequest.DONE) {
-  //     if (xhr.status === 200) {
-  //       // El servidor respondió correctamente
-  //       console.log(xhr.responseText);
-  //     } else {
-  //       // Hubo un error al enviar la solicitud
-  //       console.error(xhr.statusText);
-  //     }
-  //   }
-  // };
 
   const name = document.getElementById("txtIdNombre").value;
   const lastname = document.getElementById("txtIdApellido").value;
