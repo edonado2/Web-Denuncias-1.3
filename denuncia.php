@@ -29,13 +29,36 @@ WHERE
 
 ";
 
+  $query2 = "SELECT 
+  dn.*, 
+  dd.nombre AS denunciado_nombre,
+  dd.apellido AS denunciado_apellido,
+  dd.cedula AS denunciado_cedula,
+  dc.tipo_abuso,
+  dc.descripcion,
+  dc.fecha_abuso,
+  dc.hora_acontecimiento
+FROM 
+  denunciantes AS dn
+  INNER JOIN denunciados AS dd ON dn.id = dd.id_denuncia 
+  INNER JOIN denuncias AS dc ON dc.id = dd.id
+WHERE 
+  dn.usuario_id = $id";
+
+
   $resultado = mysqli_query($conexion, $query);
+  $resultado2 = mysqli_query($conexion, $query2);
   $registros = array();
+  $registros2 = array();
   if (
-    $resultado && mysqli_num_rows($resultado) > 0
+    $resultado && mysqli_num_rows($resultado) > 0 &&
+    $resultado2 && mysqli_num_rows($resultado2) > 0
   ) {
     while ($fila = mysqli_fetch_assoc($resultado)) {
       $registros[] = $fila;
+    }
+    while ($fila2 = mysqli_fetch_assoc($resultado2)) {
+      $registros2[] = $fila2;
     }
   }
 }
@@ -152,6 +175,35 @@ WHERE
         echo '</table>';
         echo '</div>';
 
+
+        echo '<div class= "table-responsive-sm" style="padding:20px" hidden>';
+        echo '<table id="denunciados" class="table table-striped table-hover" width="100%">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th scope="col">Nombre</th>';
+        echo '<th scope="col">Apellido</th>';
+        echo '<th scope="col">Cedula</th>';
+        echo '<th scope="col">Telefono</th>';
+        echo '<th scope="col">Descargar</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+
+
+        foreach ($registros2 as $registro2) {
+          echo '<tr>';
+          echo '<td>' . $registro2['nombre'] . '</td>';
+          echo '<td>' . $registro2['apellido'] . '</td>';
+          echo '<td>' . $registro2['cedula'] . '</td>';
+          echo '<td>' . $registro2['telefono'] . '</td>';
+          echo '<td><button class="btn btn-secondary pdf-button">Descargar</button></td>';
+
+          echo '</tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
+
         // Cerrar la conexión a la base de datos
       } else {
         header('Location: login.php');
@@ -169,7 +221,8 @@ WHERE
             var table = document.getElementById("denunciados");
 
             // Define table column widths
-            var columnWidths = [100, 100, 100, 100, 100, 100];
+            var columnWidths = [50, 50, 60, 60, 80, 50, 80];
+            var columnWidths2 = [50, 50, 60, 60, 80, 80, 50];
 
             // Define table headers
             var headers = [{
@@ -195,8 +248,43 @@ WHERE
               {
                 text: 'Hora',
                 style: 'tableHeader'
+              },
+              {
+                text: 'Descripción',
+                style: 'tableHeader'
               }
             ];
+
+            var headers2 = [{
+                text: 'Nombre',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Apellido',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Cédula',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Telefono',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Creada',
+                style: 'tableHeader'
+              },
+              {
+                text: 'Actualizada',
+                style: 'tableHeader'
+              },
+              {
+                text: '#',
+                style: 'tableHeader'
+              }
+            ];
+
 
             // Define table data
             var data = [];
@@ -224,8 +312,47 @@ WHERE
               {
                 text: '<?php echo $registro['hora_acontecimiento']; ?>',
                 style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro['descripcion']; ?>',
+                style: 'tableCell'
               }
             ]);
+
+            // Data 2
+
+            var data2 = [];
+
+            data2.push([{
+                text: '<?php echo $registro2['nombre']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro2['apellido']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro2['cedula']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro2['telefono']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro2['createdAt']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro2['updatedAt']; ?>',
+                style: 'tableCell'
+              },
+              {
+                text: '<?php echo $registro2['id']; ?>',
+                style: 'tableCell'
+              }
+            ]);
+
             <?php ?>
 
             // Define table styles
@@ -267,20 +394,61 @@ WHERE
                 keywords: 'denuncia, abuso, PDF'
               },
               content: [{
+                  text: `<?php echo $registro['createdAt']; ?>`,
+                  style: 'content',
+                  alignment: 'right'
+                },
+                {
                   text: 'Datos de la Denuncia',
                   style: 'header'
                 },
+
                 {
-                  text: 'Descripción del documento: Esta denuncia no es válida hasta que sea sellada por un organismo competente',
-                  style: 'description'
+                  text: `Yo, <?php echo $registro2['nombre']; ?>, <?php echo $registro2['apellido']; ?> C.I: <?php echo $registro2['cedula']; ?>, número de teléfono: <?php echo $registro2['telefono']; ?>, me presento ante su entidad, con la finalidad de dejar constancia de una denuncia contra el(la) señor(es/as):`,
+
+                  margin: [0, 0, 0, 20] // Adds 20 units of spacing to the top
                 },
                 {
                   table: {
-                    headerRows: 1,
+                    headerRows: 2,
                     widths: columnWidths,
                     body: [headers].concat(data)
                   },
                   layout: 'lightHorizontalLines'
+                },
+
+                {
+                  text: ` 
+                  Por medio de la presente, hago constar que toda la información suministrada en esta denuncia es verídica y fdedigna, y me responsabilizo por su veracidad.
+                  
+                  Conforme a los hechos que a continuación expongo:
+
+                  Tipo de abuso: <?php echo $registro['tipo_abuso']; ?>, lugar de los hechos: Maracaibo, a la fecha de: <?php echo $registro2['fecha_abuso']; ?>, hora: <?php echo $registro2['hora_acontecimiento']; ?>, descripción de la denuncia: <?php echo $registro2['descripcion']; ?>.
+
+                  Declaro bajo juramento que los hechos expuestos en esta denuncia son ciertos y que no he falseado ni alterado información alguna con el fin de causar un daño injustificado a terceros.
+
+                  Asimismo, manifiesto estar plenamente consciente de las consecuencias legales a las que me expongo en caso de presentar una denuncia falsa o de actuar con malicia o mala fe en el proceso. En caso de comprobarse la falsedad de la información aquí expuesta, me someto a las sanciones previstas en la ley.
+                  
+                  Esperando se tomen las medidas correspondientes me despido cordialmente.
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  `,
+                  margin: [0, 30, 0, 80]
+                },
+
+                {
+                  text: '_________________________________',
+                  margin: [40, 0, 40, 20],
+                  alignment: 'center'
                 }
               ],
               styles: {
