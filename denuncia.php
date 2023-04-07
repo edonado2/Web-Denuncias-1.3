@@ -221,7 +221,7 @@ WHERE
             var table = document.getElementById("denunciados");
 
             // Define table column widths
-            var columnWidths = [50, 50, 60, 60, 80, 50, 80];
+            var columnWidths = [50, 50, 60, 60, 80, 50];
             var columnWidths2 = [50, 50, 60, 60, 80, 80, 50];
 
             // Define table headers
@@ -249,10 +249,6 @@ WHERE
                 text: 'Hora',
                 style: 'tableHeader'
               },
-              {
-                text: 'Descripción',
-                style: 'tableHeader'
-              }
             ];
 
             var headers2 = [{
@@ -313,10 +309,7 @@ WHERE
                 text: '<?php echo $registro['hora_acontecimiento']; ?>',
                 style: 'tableCell'
               },
-              {
-                text: '<?php echo $registro['descripcion']; ?>',
-                style: 'tableCell'
-              }
+
             ]);
 
             // Data 2
@@ -419,7 +412,7 @@ WHERE
 
                 {
                   text: ` 
-                  Por medio de la presente, hago constar que toda la información suministrada en esta denuncia es verídica y fdedigna, y me responsabilizo por su veracidad.
+                  Por medio de la presente, hago constar que toda la información suministrada en esta denuncia es verídica y fidedigna, y me responsabilizo por su veracidad.
                   
                   Conforme a los hechos que a continuación expongo:
 
@@ -431,23 +424,13 @@ WHERE
                   
                   Esperando se tomen las medidas correspondientes me despido cordialmente.
                   
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
                   `,
                   margin: [0, 30, 0, 80]
                 },
 
                 {
                   text: '_________________________________',
-                  margin: [40, 0, 40, 20],
+                  margin: [40, 0, 40, 80],
                   alignment: 'center'
                 }
               ],
