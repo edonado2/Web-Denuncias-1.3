@@ -16,6 +16,7 @@ if (array_key_exists('id', $_SESSION)) {
   dn.nombre AS denunciante_nombre,
   dn.apellido AS denunciante_apellido,
   dn.cedula AS denunciante_cedula,
+  dc.id AS denuncia_id,
   dc.tipo_abuso,
   dc.descripcion,
   dc.fecha_abuso,
@@ -34,6 +35,7 @@ WHERE
   dd.nombre AS denunciado_nombre,
   dd.apellido AS denunciado_apellido,
   dd.cedula AS denunciado_cedula,
+  dc.id AS denuncia_id,
   dc.tipo_abuso,
   dc.descripcion,
   dc.fecha_abuso,
@@ -167,7 +169,7 @@ WHERE
           echo '<td>' . $registro['hora_acontecimiento'] . '</td>';
           echo '<td>' . $registro['tipo_abuso'] . '</td>';
           echo '<td>' . $registro['nombre'] . '</td>';
-          echo '<td><button class="btn btn-secondary pdf-button">Descargar</button></td>';
+          echo '<td><button onclick="downloadPDF('.$registro['denuncia_id'].')" class="btn btn-secondary pdf-button">Descargar</button></td>';
 
           echo '</tr>';
         }
@@ -212,6 +214,16 @@ WHERE
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js"></script>
+
+      <script>
+        async function downloadPDF(id) {
+
+          const request = await fetch(`http://localhost/Web-Denuncias-1.3/php/report.php?id=${id}`);
+          const response = await request.json();
+          
+          console.log(response);
+        }
+      </script>
 
       <script>
         var pdfButton = document.getElementsByClassName("pdf-button");
@@ -285,7 +297,9 @@ WHERE
           <?php
           // Replace with actual denuncia id
           $id_denuncia = $registro['id_denuncia'];
+
           $denunciante_id = 123;
+
           $query = "SELECT 
           d.*, 
           dn.nombre AS denunciante_nombre,
