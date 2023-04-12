@@ -10,10 +10,9 @@ function enviar() {
   const violenciaOpcion = document.getElementsByName("violencia-option")[0].value;
   const lugar = document.getElementsByName("lugar")[0].value;
   const fecha = document.getElementsByName("fecha")[0].value;
-  const hora = document.getElementsByName("hora")[0].value;
+  const hora = moment(document.getElementsByName("hora")[0].value, 'HH:mm').format('hh:mm A');
   const denuncia = document.getElementsByName("denuncia")[0].value;
   const agresores = JSON.stringify(aggressorList);
-
 
   Swal.fire({
     title: 'Estas seguro de procesar la denuncia?',

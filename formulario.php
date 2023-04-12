@@ -312,9 +312,10 @@ if ($resultado->num_rows > 0) {
   </script>
 
   <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+  <script src="./js/moment.js"></script>
   <script src="js/denunciados-datos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-  <script src="js/bootstrap-form.js"></script>
+  <script src="./js/bootstrap-form.js"></script>
 
 </body>
 

@@ -11,7 +11,7 @@
     $id = $_SESSION['id'];
     $id_denuncia = $_GET['id'];
 
-    $query = "SELECT d.*, dn.nombre, dn.apellido, dn.cedula, 
+    $query = "SELECT d.*, dn.nombre, dn.apellido, dn.cedula, dn.telefono,
     (SELECT JSON_ARRAYAGG(JSON_OBJECT('nombre', nombre, 'apellido', apellido, 'cedula', cedula)) FROM denunciados WHERE id_denuncia = $id_denuncia) AS denunciados
     FROM denuncias AS d
     INNER JOIN denunciantes as dn 
