@@ -219,7 +219,6 @@ WHERE
           pdfButton[i].addEventListener('click', function() {
             // Get the HTML table element
             var table = document.getElementById("denunciados");
-
             // Define table column widths
             var columnWidths = [50, 50, 60, 60, 80, 50];
             var columnWidths2 = [50, 50, 60, 60, 80, 80, 50];
@@ -282,35 +281,69 @@ WHERE
             ];
 
 
-            // Define table data
-            var data = [];
+          // Define table data
+          <?php
+          // Replace with actual denuncia id
+          $id_denuncia = $registro['id_denuncia'];
+          $denunciante_id = 123;
+          $query = "SELECT 
+          d.*, 
+          dn.nombre AS denunciante_nombre,
+          dn.apellido AS denunciante_apellido,
+          dn.cedula AS denunciante_cedula,
+          dc.tipo_abuso,
+          dc.descripcion,
+          dc.fecha_abuso,
+          dc.hora_acontecimiento
+        FROM 
+          denunciados AS d
+          INNER JOIN denunciantes AS dn ON dn.id = d.id_denuncia 
+          INNER JOIN denuncias AS dc ON dc.id = d.id_denuncia
+        WHERE 
+          dn.usuario_id = $id AND d.id_denuncia = $id_denuncia";
 
-            data.push([{
-                text: '<?php echo $registro['nombre']; ?>',
-                style: 'tableCell'
-              },
-              {
-                text: '<?php echo $registro['apellido']; ?>',
-                style: 'tableCell'
-              },
-              {
-                text: '<?php echo $registro['cedula']; ?>',
-                style: 'tableCell'
-              },
-              {
-                text: '<?php echo $registro['tipo_abuso']; ?>',
-                style: 'tableCell'
-              },
-              {
-                text: '<?php echo $registro['fecha_abuso']; ?>',
-                style: 'tableCell'
-              },
-              {
-                text: '<?php echo $registro['hora_acontecimiento']; ?>',
-                style: 'tableCell'
-              },
+          $result = mysqli_query($conexion, $query);
 
-            ]);
+          // Add query results to a PHP variable
+            $denunciados = array();
+            while ($registro = mysqli_fetch_assoc($result)) {
+              $denunciados[] = $registro;
+            }
+          ?>
+
+         var data = [];
+
+            <?php
+            foreach ($denunciados as $registro) {
+            ?>
+              data.push([{
+                  text: '<?php echo $registro['nombre']; ?>',
+                  style: 'tableCell'
+                },
+                {
+                  text: '<?php echo $registro['apellido']; ?>',
+                  style: 'tableCell'
+                },
+                {
+                  text: '<?php echo $registro['cedula']; ?>',
+                  style: 'tableCell'
+                },
+                {
+                  text: '<?php echo $registro['tipo_abuso']; ?>',
+                  style: 'tableCell'
+                },
+                {
+                  text: '<?php echo $registro['fecha_abuso']; ?>',
+                  style: 'tableCell'
+                },
+                {
+                  text: '<?php echo $registro['hora_acontecimiento']; ?>',
+                  style: 'tableCell'
+                },
+              ]);
+            <?php
+            }
+            ?>
 
             // Data 2
 
